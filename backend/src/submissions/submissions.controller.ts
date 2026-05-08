@@ -12,7 +12,7 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { SubmissionsService } from './submissions.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
-import { PDFParse } from 'pdf-parse';
+import pdfParse from 'pdf-parse';
 
 @Controller('submissions')
 @UseGuards(JwtAuthGuard)
@@ -33,7 +33,7 @@ export class SubmissionsController {
 
     for (const file of files) {
       try {
-        const pdfData = await new PDFParse({ data: file.buffer }).getText();
+        const pdfData = await pdfParse(file.buffer);
         const extractedText = pdfData.text;
 
         const result = await this.submissionsService.evaluateAndSave({
